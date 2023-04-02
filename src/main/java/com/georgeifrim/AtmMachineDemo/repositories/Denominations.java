@@ -18,13 +18,4 @@ public enum Denominations {
         return denominations;
     }
 
-    public static @NotNull List<Denominations> getDenominationsList(){
-        List<Denominations> list = new ArrayList<>();
-        list.add(Denominations.ONE_HUNDRED);
-        list.add(Denominations.FIFTY);
-        list.add(Denominations.TEN);
-        list.add(Denominations.FIVE);
-        list.add(Denominations.ONE);
-        return list;
-    }
 }
