@@ -1,4 +1,4 @@
-package com.georgeifrim.AtmMachineDemo.DTOs;
+package com.georgeifrim.AtmMachineDemo.amountDTO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.georgeifrim.AtmMachineDemo.repositories.Denominations;

@@ -25,11 +25,4 @@ public class AtmUserController {
     public Map<Denominations, Integer> withdrawAmount (@PathVariable int amount){
             return atmService.withdrawAmount(amount);
     }
-
-
-
-//    @GetMapping("/amountwithdrawed/{amount}")
-//    public Map<Denominations, Integer> ammountWithdrawed(@PathVariable Integer amount){
-//        return atmService.splitIntoDenominations(amount);
-//    }
 }

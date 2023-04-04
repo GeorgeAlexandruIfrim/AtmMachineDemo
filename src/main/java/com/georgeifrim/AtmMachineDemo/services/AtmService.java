@@ -1,7 +1,7 @@
 package com.georgeifrim.AtmMachineDemo.services;
 
 
-import com.georgeifrim.AtmMachineDemo.DTOs.DTO;
+import com.georgeifrim.AtmMachineDemo.amountDTO.DTO;
 import com.georgeifrim.AtmMachineDemo.exceptions.IllegalAmount;
 import com.georgeifrim.AtmMachineDemo.exceptions.NotEnoughMoney;
 import com.georgeifrim.AtmMachineDemo.repositories.AtmRepository;
@@ -25,7 +25,7 @@ public class AtmService {
             throw new IllegalAmount();
         } else if(amount <= atmRepository.currentStockValue()){
             Map<Denominations, Integer> map = splitIntoDenominations(amount);
-            atmRepository.withdrawAmount(map);
+            atmRepository.withdrawAmount(map, amount);
             return map;
         }else{
             throw new NotEnoughMoney();

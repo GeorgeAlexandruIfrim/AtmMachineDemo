@@ -4,8 +4,8 @@ import com.georgeifrim.AtmMachineDemo.services.AtmService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import java.util.Map;
-import java.util.TreeMap;
+
+import java.util.*;
 
 @Repository
 @Slf4j
@@ -21,7 +21,7 @@ public class AtmRepository {
     }
 
     public void feedMoney(int amount) {
-       Map<Denominations, Integer> map = splitIntoDenominations(amount);
+       Map<Denominations, Integer> map = splitIntoDenominations(amount, Denominations.ONE_HUNDRED);
         for(Map.Entry<Denominations, Integer> entry : map.entrySet()){
             for(Map.Entry<Denominations, Integer> stockentry : atmStock.entrySet()){
                 if(stockentry.getKey().equals(entry.getKey())){
@@ -31,41 +31,21 @@ public class AtmRepository {
         }
     }
 
-    public Map<Denominations, Integer> withdrawAmount(Map<Denominations, Integer> withdrawal){
+    public Map<Denominations, Integer> withdrawAmount(Map<Denominations, Integer> withdrawal, int amount){
 
+        for(Map.Entry<Denominations, Integer> stockentry : atmStock.entrySet()){
 
-//        for(Map.Entry<Denominations, Integer> entry : withdrawal.entrySet()){
-//            for(Map.Entry<Denominations, Integer> stockentry : atmStock.entrySet()){
-//                if(stockentry.getKey().equals(entry.getKey()) && stockentry.getValue() >= entry.getValue()){
-//                    atmStock.replace(stockentry.getKey(), stockentry.getValue() - entry.getValue());
-//                }else{
-//                    atmStock.replace(stockentry.getKey(), stockentry.getValue());
-//                    amount = amount - (entry.getValue()-stockentry.getValue()) * stockentry.getKey().getDenominationValue();
-//                }
-//            }
-//        }
-//        return atmStock;
+            int noBanknotes = amount/stockentry.getKey().getDenominationValue();
 
-//        for(Map.Entry<Denominations, Integer> stockentry : atmStock.entrySet()){
-//            withdrawal = splitIntoDenominations(amount);
-//            for(Map.Entry<Denominations, Integer> entry : withdrawal.entrySet()){
-//                if(stockentry.getKey().equals(entry.getKey()) && stockentry.getValue() >= entry.getValue()){
-//                    atmStock.replace(stockentry.getKey(), stockentry.getValue() - entry.getValue());
-//                }else{
-//                    atmStock.replace(stockentry.getKey(), stockentry.getValue());
-//                    amount = amount - (entry.getValue()-stockentry.getValue()) * stockentry.getKey().getDenominationValue();
-//                }
-//            }
-//        }
-//        return atmStock;
-
-        for(Map.Entry<Denominations, Integer> entry : withdrawal.entrySet()){
-            for(Map.Entry<Denominations, Integer> stockentry : atmStock.entrySet()){
-                if(stockentry.getKey().equals(entry.getKey())){
-                    atmStock.replace(stockentry.getKey(), stockentry.getValue() - entry.getValue());
-                }
+            if(noBanknotes <= stockentry.getValue()){
+                atmStock.replace(stockentry.getKey(), stockentry.getValue() - noBanknotes);
+                amount = amount - noBanknotes * stockentry.getKey().getDenominationValue();
+            }else{
+                atmStock.replace(stockentry.getKey(), 0);
+                amount = amount - stockentry.getValue() * stockentry.getKey().getDenominationValue();
             }
         }
+
         if (atmStock.get(Denominations.ONE_HUNDRED) <= 5) {
             log.warn("One Hundred Dollar Bill - Critical Level <10% - admin@atm.ro");
         } else {
@@ -91,16 +71,19 @@ public class AtmRepository {
         return sum;
     }
 
-    public Map<Denominations, Integer> splitIntoDenominations(int amount){
+    public Map<Denominations, Integer> splitIntoDenominations(int amount, Denominations den){
+        Comparator<Denominations> comp = (o1, o2) -> o2.getDenominationValue() - o1.getDenominationValue();
         Map<Denominations, Integer> map = new TreeMap<>();
-        int[] denominations = {100,50,10,5,1};
+        Integer[] denominations = {100,50,10,5,1};
         Denominations[] list = Denominations.values();
 
-        for(int i : denominations){
-            int numberOfBanknotes = amount/i;
-            amount = amount % i;
+        int denIndex = List.of(denominations).indexOf(den.getDenominationValue());
+
+        for(int i = denIndex; i<denominations.length; i++){
+            int numberOfBanknotes = amount/denominations[i];
+            amount = amount % denominations[i];
             for(Denominations d : list){
-                if(d.getDenominationValue() == i)
+                if(d.getDenominationValue() == denominations[i])
                     map.put(d,numberOfBanknotes);
             }
         }
