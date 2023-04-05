@@ -1,6 +1,6 @@
 package com.georgeifrim.AtmMachineDemo.services;
 
-import com.georgeifrim.AtmMachineDemo.amountDTO.DTO;
+import com.georgeifrim.AtmMachineDemo.dtos.AmountDto;
 import com.georgeifrim.AtmMachineDemo.exceptions.IllegalAmount;
 import com.georgeifrim.AtmMachineDemo.exceptions.NotEnoughMoney;
 import com.georgeifrim.AtmMachineDemo.repositories.AtmRepository;
@@ -25,11 +25,11 @@ public class AtmService {
             throw new NotEnoughMoney();
         }
     }
-    public DTO getStock(){
-        return new DTO(atmRepository.currentStock());
+    public AmountDto getStock(){
+        return new AmountDto(atmRepository.currentStock());
     }
 
-    public void feedMoney(int amount) {
-        atmRepository.feedMoney(amount);
+    public AmountDto feedMoney(int amount) {
+        return new AmountDto(atmRepository.feedMoney(amount));
     }
 }

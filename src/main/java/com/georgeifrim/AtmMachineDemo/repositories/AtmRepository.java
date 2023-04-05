@@ -16,7 +16,7 @@ public class AtmRepository {
         atmStock.put(Denominations.FIVE,100);
         atmStock.put(Denominations.ONE,100);
     }
-    public void feedMoney(int amount){
+    public Map<Denominations, Integer> feedMoney(int amount){
        Map<Denominations, Integer> map = splitIntoDenominations(amount, Denominations.ONE_HUNDRED);
         for(Map.Entry<Denominations, Integer> entry : map.entrySet()){
             for(Map.Entry<Denominations, Integer> stockentry : atmStock.entrySet()){
@@ -25,6 +25,7 @@ public class AtmRepository {
                 }
             }
         }
+        return map;
     }
     public Map<Denominations, Integer> withdrawAmount(int amount){
 
@@ -61,7 +62,7 @@ public class AtmRepository {
         return sum;
     }
     public Map<Denominations, Integer> splitIntoDenominations(int amount, Denominations den){
-        Comparator<Denominations> comp = (o1, o2) -> o2.getDenominationValue() - o1.getDenominationValue();
+
         Map<Denominations, Integer> map = new TreeMap<>();
         Integer[] denominations = {100,50,10,5,1};
         Denominations[] list = Denominations.values();

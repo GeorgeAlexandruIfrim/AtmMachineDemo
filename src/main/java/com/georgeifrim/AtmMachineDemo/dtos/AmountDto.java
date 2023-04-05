@@ -1,9 +1,9 @@
-package com.georgeifrim.AtmMachineDemo.amountDTO;
+package com.georgeifrim.AtmMachineDemo.dtos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.georgeifrim.AtmMachineDemo.repositories.Denominations;
 import java.util.Map;
-public class DTO {
+public class AmountDto {
 
     int oneHundredDollars;
     int fiftyDollars;
@@ -12,7 +12,7 @@ public class DTO {
     int oneDollars;
     int total;
 
-    public DTO(Map<Denominations, Integer> map){
+    public AmountDto(Map<Denominations, Integer> map){
         this.oneHundredDollars = map.get(Denominations.ONE_HUNDRED);
         this.fiftyDollars = map.get(Denominations.FIFTY);
         this.tenDollars = map.get(Denominations.TEN);
