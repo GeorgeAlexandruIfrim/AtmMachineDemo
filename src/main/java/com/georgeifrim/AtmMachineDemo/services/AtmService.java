@@ -24,27 +24,10 @@ public class AtmService {
         if(amount<=0){
             throw new IllegalAmount();
         } else if(amount <= atmRepository.currentStockValue()){
-            Map<Denominations, Integer> map = splitIntoDenominations(amount);
-            atmRepository.withdrawAmount(map, amount);
-            return map;
+            return atmRepository.withdrawAmount(amount);
         }else{
             throw new NotEnoughMoney();
         }
-    }
-    public Map<Denominations, Integer> splitIntoDenominations(int amount){
-        Map<Denominations, Integer> map = new TreeMap<>();
-        int[] denominations = {100,50,10,5,1};
-        Denominations[] list = Denominations.values();
-
-        for(int i : denominations){
-            int numberOfBanknotes = amount/i;
-            amount = amount % i;
-            for(Denominations d : list){
-                if(d.getDenominationValue() == i)
-                    map.put(d,numberOfBanknotes);
-            }
-        }
-        return map;
     }
     public DTO getStock(){
         return new DTO(atmRepository.currentStock());

@@ -18,4 +18,8 @@ public enum Denominations {
         return denominations;
     }
 
+    public static List<Denominations> getDenominationsList(){
+        return List.of(ONE_HUNDRED, FIFTY, TEN, FIVE, ONE);
+    }
+
 }

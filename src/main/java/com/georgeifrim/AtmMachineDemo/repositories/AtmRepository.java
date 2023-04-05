@@ -1,14 +1,15 @@
 package com.georgeifrim.AtmMachineDemo.repositories;
 
-import com.georgeifrim.AtmMachineDemo.services.AtmService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import static com.georgeifrim.AtmMachineDemo.repositories.CriticalDenominationLevelLogger.*;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 @Repository
-@Slf4j
+
 public class AtmRepository {
     Map<Denominations, Integer> atmStock = new TreeMap<>();
 
@@ -31,34 +32,30 @@ public class AtmRepository {
         }
     }
 
-    public Map<Denominations, Integer> withdrawAmount(Map<Denominations, Integer> withdrawal, int amount){
+    public Map<Denominations, Integer> withdrawAmount(int amount) {
 
-        for(Map.Entry<Denominations, Integer> stockentry : atmStock.entrySet()){
+        Map<Denominations, Integer> withdrawal = new TreeMap<>();
 
-            int noBanknotes = amount/stockentry.getKey().getDenominationValue();
+        for (Map.Entry<Denominations, Integer> stockentry : atmStock.entrySet()) {
 
-            if(noBanknotes <= stockentry.getValue()){
+            int noBanknotes = amount / stockentry.getKey().getDenominationValue();
+
+            if (noBanknotes <= stockentry.getValue()) {
                 atmStock.replace(stockentry.getKey(), stockentry.getValue() - noBanknotes);
                 amount = amount - noBanknotes * stockentry.getKey().getDenominationValue();
-            }else{
-                atmStock.replace(stockentry.getKey(), 0);
+                withdrawal.put(stockentry.getKey(), noBanknotes);
+            } else {
+                withdrawal.put(stockentry.getKey(), stockentry.getValue());
                 amount = amount - stockentry.getValue() * stockentry.getKey().getDenominationValue();
+                atmStock.replace(stockentry.getKey(), 0);
+                int denIndex = Denominations.getDenominationsList().indexOf(stockentry.getKey());
+                Map<Denominations, Integer> patch = splitIntoDenominations(amount, Denominations.getDenominationsList().get(denIndex + 1));
+                withdrawal.putAll(patch);
             }
         }
-
-        if (atmStock.get(Denominations.ONE_HUNDRED) <= 5) {
-            log.warn("One Hundred Dollar Bill - Critical Level <10% - admin@atm.ro");
-        } else {
-            if (atmStock.get(Denominations.ONE_HUNDRED) <= 10) {
-                log.warn("One Hundred Dollar Bill - Critical Level <20% - +407123456");
-            }
-        }
-        if(atmStock.get(Denominations.FIFTY) <= 7){
-            log.warn("Fifty Dollar Bill - Critical Level <20% - admin@atm.ro - +407123456");
-        }
-        return atmStock;
+        lowDenominationLevelAlert(atmStock);
+    return withdrawal;
     }
-
     public Map<Denominations, Integer> currentStock(){
         return atmStock;
     }
