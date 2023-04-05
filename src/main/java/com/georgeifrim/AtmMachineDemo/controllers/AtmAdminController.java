@@ -4,7 +4,6 @@ import com.georgeifrim.AtmMachineDemo.amountDTO.DTO;
 import com.georgeifrim.AtmMachineDemo.services.AtmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/admin")
 public class AtmAdminController {

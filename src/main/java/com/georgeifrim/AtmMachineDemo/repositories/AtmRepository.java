@@ -2,17 +2,13 @@ package com.georgeifrim.AtmMachineDemo.repositories;
 
 import org.springframework.stereotype.Repository;
 import static com.georgeifrim.AtmMachineDemo.repositories.CriticalDenominationLevelLogger.*;
-
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
 @Repository
-
 public class AtmRepository {
     Map<Denominations, Integer> atmStock = new TreeMap<>();
-
     private AtmRepository(){
         atmStock.put(Denominations.ONE_HUNDRED,50);
         atmStock.put(Denominations.FIFTY,50);
@@ -20,8 +16,7 @@ public class AtmRepository {
         atmStock.put(Denominations.FIVE,100);
         atmStock.put(Denominations.ONE,100);
     }
-
-    public void feedMoney(int amount) {
+    public void feedMoney(int amount){
        Map<Denominations, Integer> map = splitIntoDenominations(amount, Denominations.ONE_HUNDRED);
         for(Map.Entry<Denominations, Integer> entry : map.entrySet()){
             for(Map.Entry<Denominations, Integer> stockentry : atmStock.entrySet()){
@@ -31,8 +26,7 @@ public class AtmRepository {
             }
         }
     }
-
-    public Map<Denominations, Integer> withdrawAmount(int amount) {
+    public Map<Denominations, Integer> withdrawAmount(int amount){
 
         Map<Denominations, Integer> withdrawal = new TreeMap<>();
 
@@ -53,13 +47,12 @@ public class AtmRepository {
                 withdrawal.putAll(patch);
             }
         }
-        lowDenominationLevelAlert(atmStock);
+        low_Denomination_Level_Alert(atmStock);
     return withdrawal;
     }
     public Map<Denominations, Integer> currentStock(){
         return atmStock;
     }
-
     public int currentStockValue(){
         int sum = 0;
         for(Map.Entry<Denominations,Integer> entries : atmStock.entrySet()){
@@ -67,7 +60,6 @@ public class AtmRepository {
         }
         return sum;
     }
-
     public Map<Denominations, Integer> splitIntoDenominations(int amount, Denominations den){
         Comparator<Denominations> comp = (o1, o2) -> o2.getDenominationValue() - o1.getDenominationValue();
         Map<Denominations, Integer> map = new TreeMap<>();

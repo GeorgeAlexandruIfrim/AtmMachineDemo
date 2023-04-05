@@ -1,12 +1,10 @@
 package com.georgeifrim.AtmMachineDemo.repositories;
 
 import lombok.extern.slf4j.Slf4j;
-
 import java.util.Map;
 @Slf4j
 public class CriticalDenominationLevelLogger {
-
-    static void lowDenominationLevelAlert(Map<Denominations, Integer> atmStock){
+    static void low_Denomination_Level_Alert(Map<Denominations, Integer> atmStock){
 
         if (atmStock.get(Denominations.ONE_HUNDRED) <= 5) {
             log.warn("One Hundred Dollar Bill - Critical Level <10% - admin@atm.ro");

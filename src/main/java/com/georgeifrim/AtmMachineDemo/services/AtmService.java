@@ -1,6 +1,5 @@
 package com.georgeifrim.AtmMachineDemo.services;
 
-
 import com.georgeifrim.AtmMachineDemo.amountDTO.DTO;
 import com.georgeifrim.AtmMachineDemo.exceptions.IllegalAmount;
 import com.georgeifrim.AtmMachineDemo.exceptions.NotEnoughMoney;
@@ -9,11 +8,8 @@ import com.georgeifrim.AtmMachineDemo.repositories.Denominations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
-import java.util.TreeMap;
-
 @Service
 public class AtmService {
-
     private final AtmRepository atmRepository;
     @Autowired
     public AtmService(AtmRepository atmRepository){
