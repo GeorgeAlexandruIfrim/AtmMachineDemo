@@ -1,5 +1,6 @@
 package com.georgeifrim.AtmMachineDemo.repositories;
 
+import lombok.Data;
 import org.springframework.stereotype.Repository;
 import static com.georgeifrim.AtmMachineDemo.repositories.CriticalDenominationLevelLogger.*;
 import java.util.Comparator;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 @Repository
+@Data
 public class AtmRepository {
     Map<Denominations, Integer> atmStock = new TreeMap<>();
     private AtmRepository(){
