@@ -12,7 +12,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/user")
 public class AtmUserController {
-
+    //new AtmMachine Demo app
     private final AtmService atmService;
 
     @Autowired
